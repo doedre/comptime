@@ -31,7 +31,7 @@ namespace comptime {
         storage_{values...}
     {}
 
-    template<class... Values>
+    template<typename... Values>
     constexpr static_array(Values&&... values) noexcept :
         storage_{values...}
     {}
@@ -82,10 +82,37 @@ namespace comptime {
     }
 
     template<size_type Index>
+    [[nodiscard]] constexpr reference at() noexcept
+    {
+      static_assert(Index < Capacity, "Index is out of array range");
+      return storage_[Index];
+    }
+
+    template<size_type Index>
     [[nodiscard]] constexpr const_reference at() const noexcept
     {
       static_assert(Index < Capacity, "Index is out of array range");
       return storage_[Index];
+    }
+
+    [[nodiscard]] constexpr reference at(const size_type index) noexcept
+    {
+      return storage_[index];
+    }
+
+    [[nodiscard]] constexpr const_reference at(const size_type index) const noexcept
+    {
+      return storage_[index];
+    }
+
+    [[nodiscard]] constexpr reference operator[](const size_type index) noexcept
+    {
+      return storage_[index];
+    }
+
+    [[nodiscard]] constexpr const_reference operator[](const size_type index) const noexcept
+    {
+      return storage_[index];
     }
   };
 
