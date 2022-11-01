@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include <comptime/ct_initializer_list.hpp>
+#include <comptime/ct_factory.hpp>
 
 namespace comptime {
 
@@ -116,9 +117,18 @@ namespace comptime {
     }
   };
 
-  template<typename ValueT, class... Values>
-  constexpr auto make_static_array(Values... values) -> static_array<ValueT, sizeof...(values)>
-  {
-    return static_array<ValueT, sizeof...(values)>(std::forward<ValueT>(values)...);
-  }
+  struct static_array_tc {
+    template<class... T>
+    using invoke = static_array<T..., sizeof...(T)>;
+  };
+
+  template<typename T, std::size_t Capacity>
+  struct static_container_constructor<static_array<T, Capacity>> {
+    template<class... Xs>
+    constexpr static auto ct_make(Xs&&... xs) noexcept -> static_array<T, sizeof...(Xs)>
+    {
+      return static_array<T, sizeof...(xs)>(std::forward<Xs>(xs)...);
+    }
+  };
+
 } // namespace comptime
