@@ -88,19 +88,16 @@ namespace comptime {
     }
   };
   
-  struct static_stack_tc {
-    template<class... T>
-    using invoke = static_stack<T..., sizeof...(T)>;
-  };
+  template<typename... T>
+  using static_stack_t = static_stack<T..., sizeof...(T)>;
 
-  template<typename T, std::size_t Capacity>
-  struct static_container_constructor<static_stack<T, Capacity>> {
-    template<class... Xs>
-    constexpr static auto ct_make(Xs&&... xs) noexcept -> static_stack<T, sizeof...(Xs)>
+  template<typename ValueT, std::size_t Capacity>
+  struct static_container_constructor<static_stack<ValueT, Capacity>> {
+    template<typename... Values>
+    constexpr static auto ct_make(Values&&... values) noexcept
     {
-      return static_stack<T, sizeof...(xs)>(std::forward<Xs>(xs)...);
+      return static_stack<ValueT, sizeof...(values)>(std::forward<Values>(values)...);
     }
   };
-
 
 } // namespace comptime

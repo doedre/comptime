@@ -35,7 +35,7 @@ static_assert(stack.peek() == 13);
 static_assert(stack.front() == 10);
 
 constexpr auto make_stack = []{
-  auto stack = comptime::ct_make<comptime::static_stack_tc::invoke<int>>(10, 20);
+  auto stack = comptime::ct_make<comptime::static_stack_t<int>>(10, 20);
   return stack;
 }();
 

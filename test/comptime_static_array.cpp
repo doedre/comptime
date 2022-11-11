@@ -16,9 +16,7 @@ static_assert(arrayf.at<1>() == 10);
 static_assert(arrayf.at<2>() == 3);
 
 constexpr auto generic_make_array = []{
-  auto a = comptime::ct_make<comptime::static_array<int, 2>>(10, 12);
-  // or
-  auto arr = comptime::ct_make<comptime::static_array_tc::invoke<int>>(10, 12);
+  auto arr = comptime::ct_make<comptime::static_array_t<int>>(10, 12);
   return arr;
 }();
 
