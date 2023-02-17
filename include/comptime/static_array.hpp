@@ -1,10 +1,11 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 
-#include <comptime/ct_initializer_list.hpp>
-#include <comptime/ct_factory.hpp>
+#include <make.hpp>
 
+namespace d4 {
 namespace comptime {
 
   template<typename T, std::size_t Capacity>
@@ -19,17 +20,12 @@ namespace comptime {
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
-    using const_pointer = const value_type;
+    using const_pointer = const value_type*;
     using iterator = pointer;
     using const_iterator = const_pointer;
 
     constexpr static_array() noexcept :
         storage_()
-    {}
-
-    template<T... values>
-    constexpr static_array(ct_initializer_list<T, values...> cil) noexcept :
-        storage_{values...}
     {}
 
     template<typename... Values>
@@ -117,16 +113,15 @@ namespace comptime {
     }
   };
 
-  template<typename... T>
-  using static_array_t = static_array<T..., sizeof...(T)>;
+} // namespace comptime
 
-  template<typename ValueT, std::size_t Capacity>
-  struct static_container_constructor<static_array<ValueT, Capacity>> {
-    template<typename... Values>
-    constexpr static auto ct_make(Values&&... values) noexcept
+  template<typename ValueT, std::size_t ArrSize>
+  struct make_factory_constructor<comptime::static_array<ValueT, ArrSize>> {
+    template<typename... Xs>
+    static constexpr auto make(Xs&&... xs)
     {
-      return static_array<ValueT, sizeof...(values)>(std::forward<Values>(values)...);
+      return comptime::static_array<std::common_type_t<Xs...>, sizeof...(xs)>(std::forward<Xs>(xs)...);
     }
   };
 
-} // namespace comptime
+} // namespace d4

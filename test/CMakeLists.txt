@@ -1,14 +1,5 @@
 include(CTest)
 
-add_executable(comptime-ctstr-test
-  comptime_ctstr.cpp
-)
-
-target_include_directories(comptime-ctstr-test
-  PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-)
-
 add_executable(comptime-static-map-test
   comptime_static_map.cpp
 )
@@ -40,11 +31,6 @@ find_program(MEMORYCHECK_COMMAND NAMES valgrind)
 set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
 
 enable_testing()
-
-add_test(
-  NAME      ct_str.comptime
-  COMMAND   $<TARGET_FILE:comptime-ctstr-test>
-)
 
 add_test(
   NAME      static_map.comptime

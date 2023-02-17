@@ -3,8 +3,6 @@
 #include <cstddef>
 #include <memory>
 
-#include <comptime/ct_factory.hpp>
-
 namespace comptime {
 
   template<typename T, std::size_t Capacity>
@@ -87,17 +85,4 @@ namespace comptime {
       return back();
     }
   };
-  
-  template<typename... T>
-  using static_stack_t = static_stack<T..., sizeof...(T)>;
-
-  template<typename ValueT, std::size_t Capacity>
-  struct static_container_constructor<static_stack<ValueT, Capacity>> {
-    template<typename... Values>
-    constexpr static auto ct_make(Values&&... values) noexcept
-    {
-      return static_stack<ValueT, sizeof...(values)>(std::forward<Values>(values)...);
-    }
-  };
-
 } // namespace comptime

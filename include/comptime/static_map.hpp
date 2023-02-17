@@ -3,8 +3,6 @@
 #include <cstddef>
 #include <initializer_list>
 
-#include <comptime/ct_factory.hpp>
-
 namespace comptime {
 
   template<
@@ -166,17 +164,4 @@ namespace comptime {
       return erase(f);
     }
   };
-
-  template<typename... T>
-  using static_map_t = static_map<T..., sizeof...(T)>;
-
-  template<typename KeyT, typename MappedT, std::size_t Capacity>
-  struct static_container_constructor<static_map<KeyT, MappedT, Capacity>> {
-    template<typename... Values>
-    constexpr static auto ct_make(Values&&... values) noexcept
-    {
-      return static_map<KeyT, MappedT, sizeof...(values)>(std::forward<Values>(values)...);
-    }
-  };
-
 } // namespace comptime
